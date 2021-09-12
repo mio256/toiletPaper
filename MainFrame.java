@@ -1,66 +1,93 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class MainFrame extends JFrame implements ActionListener {
-    JLabel endlabel;
-    JComboBox combo;
-    SpinnerNumberModel model;
+    JLabel endLabel;
+    JComboBox toiletCombo;
+    SpinnerNumberModel numSpinner;
 
     MainFrame() {
         // アイコン設定
         ImageIcon icon = new ImageIcon("./icon.png");
         setIconImage(icon.getImage());
 
-        // PAGE_
-        // ラベル
-        JLabel startlabel = new JLabel();
-        JPanel startPanel = new JPanel();
-        startPanel.add(startlabel);
+        // トップ ラベル
+        JPanel topLabelPanel = new JPanel();
+        JLabel topLabel = new JLabel("資源を大切に。 トイレットペーパーは大切に使いましょう。");
+        topLabelPanel.add(topLabel);
 
-        // CENTER
-        JPanel centerPanel = new JPanel();
-        // コンボボックス
-        String[] combodata = { "toilet1", "toilet2", "toilet3", "toilet4", "toilet5" };
-        combo = new JComboBox(combodata);
-        combo.setPreferredSize(new Dimension(200, 50));
-        combo.setMaximumRowCount(5);
-        centerPanel.add(combo);
-        // スピナー
-        model = new SpinnerNumberModel(1, null, null, 1);
-        JSpinner spinner = new JSpinner(model);
-        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "#,##0");
-        spinner.setEditor(editor);
-        spinner.setPreferredSize(new Dimension(150, 25));
-        centerPanel.add(spinner);
+        // トイレの場所 コンボ
+        JPanel toiletComboPanel = new JPanel();
+        String[] toiletComboData = {"toilet1", "toilet2", "toilet3", "toilet4", "toilet5"};
+        toiletCombo = new JComboBox(toiletComboData);
+        toiletCombo.setPreferredSize(new Dimension(200, 50));
+        toiletCombo.setMaximumRowCount(5);
+        toiletComboPanel.add(toiletCombo);
 
-        // EAST
-        // ボタン
-        JPanel eastPanel = new JPanel();
-        JButton enterbutton = new JButton("OK");
-        enterbutton.addActionListener(this);
-        eastPanel.add(enterbutton);
+        // トイレットペーパー数 スピナー
+        JPanel numSpinnerPanel = new JPanel();
+        numSpinner = new SpinnerNumberModel(1, 1, 255, 1); // 初期値,最小値,最大値,増分
+        JSpinner numJSpinner = new JSpinner(numSpinner);
+        JSpinner.NumberEditor numberEditor = new JSpinner.NumberEditor(numJSpinner, "#,##0");
+        numJSpinner.setEditor(numberEditor);
+        numJSpinner.setPreferredSize(new Dimension(150, 25));
+        numSpinnerPanel.add(numJSpinner);
 
-        // PAGE_END
-        // ラベル
-        endlabel = new JLabel();
-        JPanel endPanel = new JPanel();
-        endPanel.add(endlabel);
+        // 決定 ボタン
+        JPanel enterButtonPanel = new JPanel();
+        JButton enterButton = new JButton("OK");
+        enterButton.addActionListener(this); // Action
+        enterButtonPanel.add(enterButton);
+
+        // 記録確認 ラベル
+        JPanel endLabelPanel = new JPanel();
+        endLabel = new JLabel();
+        endLabelPanel.add(endLabel);
+
+        // 記録参照 テキストフィールド
+        JPanel searchTextFieldPanel = new JPanel();
+        JTextField searchTextField = new JTextField(30);
+        searchTextField.addActionListener(this); // Action
+        searchTextFieldPanel.add(searchTextField);
 
         // ペイン
-        setLayout(new FlowLayout());
+        this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));// 縦一列に並べる
         Container contentPane = getContentPane();
-        contentPane.add(startPanel, BorderLayout.PAGE_START);
-        contentPane.add(centerPanel, BorderLayout.CENTER);
-        contentPane.add(eastPanel, BorderLayout.EAST);
-        contentPane.add(endPanel, BorderLayout.PAGE_END);
+        contentPane.add(topLabelPanel, BorderLayout.CENTER);
+        contentPane.add(toiletComboPanel, BorderLayout.CENTER);
+        contentPane.add(numSpinnerPanel, BorderLayout.CENTER);
+        contentPane.add(enterButtonPanel, BorderLayout.CENTER);
+        contentPane.add(endLabelPanel, BorderLayout.CENTER);
+        contentPane.add(searchTextFieldPanel, BorderLayout.CENTER);
     }
 
     public void actionPerformed(ActionEvent e) {
-        String comboText = "null";
-        Integer spinnerText = -1;
-        comboText = (String) combo.getSelectedItem();
-        spinnerText = (Integer) model.getValue();
-        endlabel.setText(comboText + " " + spinnerText);
+        String cmd = e.getActionCommand();
+        System.out.println(cmd);
+
+        if (cmd.equals("OK")) {
+            cmdEnterButton();
+        } else {
+            Seri search = new Seri();
+            search.read(cmd);
+        }
+    }
+
+    public void cmdEnterButton() {
+        String comboText = (String) toiletCombo.getSelectedItem();
+        Integer spinnerNum = (Integer) numSpinner.getValue();
+        Date nowDate = new Date();
+        SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String showDate = DateFormat.format(nowDate);
+
+        // 記録確認表示
+        endLabel.setText(comboText + "/" + spinnerNum + "/" + showDate);
+
+        // データ記録
+        Seri save = new Seri();
+        save.write(comboText, spinnerNum, nowDate);
     }
 }
