@@ -2,9 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.text.SimpleDateFormat;
+import java.text.*;
 
 public class MainFrame extends JFrame implements ActionListener {
+
     JLabel endLabel;
     JComboBox toiletCombo;
     SpinnerNumberModel numSpinner;
@@ -16,13 +17,12 @@ public class MainFrame extends JFrame implements ActionListener {
 
         // トップ ラベル
         JPanel topLabelPanel = new JPanel();
-        JLabel topLabel = new JLabel("資源を大切に。 トイレットペーパーは大切に使いましょう。");
+        JLabel topLabel = new JLabel(Main.topLabelStr);
         topLabelPanel.add(topLabel);
 
         // トイレの場所 コンボ
         JPanel toiletComboPanel = new JPanel();
-        String[] toiletComboData = {"toilet1", "toilet2", "toilet3", "toilet4", "toilet5"};
-        toiletCombo = new JComboBox(toiletComboData);
+        toiletCombo = new JComboBox(Main.toiletComboData);
         toiletCombo.setPreferredSize(new Dimension(200, 50));
         toiletCombo.setMaximumRowCount(5);
         toiletComboPanel.add(toiletCombo);
@@ -57,15 +57,12 @@ public class MainFrame extends JFrame implements ActionListener {
         contentPane.add(endLabelPanel, BorderLayout.CENTER);
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) { // Action
         String cmd = e.getActionCommand();
         System.out.println(cmd);
 
-        if (cmd.equals("OK")) {
+        if (cmd.equals("OK")) { // enterButton
             cmdEnterButton();
-        } else {
-            Seri search = new Seri();
-            search.read(cmd);
         }
     }
 
