@@ -47,12 +47,6 @@ public class MainFrame extends JFrame implements ActionListener {
         endLabel = new JLabel();
         endLabelPanel.add(endLabel);
 
-        // 記録参照 テキストフィールド
-        JPanel searchTextFieldPanel = new JPanel();
-        JTextField searchTextField = new JTextField(30);
-        searchTextField.addActionListener(this); // Action
-        searchTextFieldPanel.add(searchTextField);
-
         // ペイン
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));// 縦一列に並べる
         Container contentPane = getContentPane();
@@ -61,7 +55,6 @@ public class MainFrame extends JFrame implements ActionListener {
         contentPane.add(numSpinnerPanel, BorderLayout.CENTER);
         contentPane.add(enterButtonPanel, BorderLayout.CENTER);
         contentPane.add(endLabelPanel, BorderLayout.CENTER);
-        contentPane.add(searchTextFieldPanel, BorderLayout.CENTER);
     }
 
     public void actionPerformed(ActionEvent e) {

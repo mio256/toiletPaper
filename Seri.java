@@ -3,6 +3,10 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class Seri {
+    String text;
+    Integer num;
+    Date date;
+
     public void write(String str, Integer num, Date date) {
         SimpleDateFormat saveDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String saveString = saveDateFormat.format(date);
@@ -34,9 +38,9 @@ public class Seri {
             Data data = (Data) objInStream.readObject();
             objInStream.close();
 
-            System.out.println(data.getText());
-            System.out.println(data.getNum());
-            System.out.println(data.getDate());
+            text = data.getText();
+            num = data.getNum();
+            date = data.getDate();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -47,73 +51,15 @@ public class Seri {
         }
     }
 
-    public String readText(String str) {
-        try {
-            if (!str.contains(".")) {
-                str = str + ".bin";
-            }
-
-            ObjectInputStream objInStream = new ObjectInputStream(new FileInputStream(str));
-
-            Data data = (Data) objInStream.readObject();
-            objInStream.close();
-
-            return data.getText();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public String readText() {
+        return text;
     }
 
-    public Integer readNum(String str) {
-        try {
-            if (!str.contains(".")) {
-                str = str + ".bin";
-            }
-
-            ObjectInputStream objInStream = new ObjectInputStream(new FileInputStream(str));
-
-            Data data = (Data) objInStream.readObject();
-            objInStream.close();
-
-            return data.getNum();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Integer readNum() {
+        return num;
     }
 
-    public Date readDate(String str) {
-        try {
-            if (!str.contains(".")) {
-                str = str + ".bin";
-            }
-
-            ObjectInputStream objInStream = new ObjectInputStream(new FileInputStream(str));
-
-            Data data = (Data) objInStream.readObject();
-            objInStream.close();
-
-            return data.getDate();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Date readDate() {
+        return date;
     }
-
 }
